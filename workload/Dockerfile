@@ -10,8 +10,9 @@ FROM docker.io/debian:bookworm-slim
 COPY --from=builder /usr/local/cargo/bin/workload /app/workload
 COPY --from=builder /usr/local/cargo/bin/validation /app/validation
 COPY --from=builder /usr/local/cargo/bin/load /app/load
+COPY --from=builder /usr/local/cargo/bin/eventually_consumer_catches_up /opt/antithesis/test/v1/main/eventually_consumer_catches_up
 COPY scripts/docker-entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
+RUN sed -i 's/\r$//' /app/entrypoint.sh && chmod +x /app/entrypoint.sh
 RUN mkdir -p /app/logs
 WORKDIR /app
 CMD ["/app/entrypoint.sh"]
